@@ -5,13 +5,18 @@ import java.util.Random;
 
 
 public class Perceptron {
+	
+	final double ETA = 0.5; //wspó³czynnik uczenia
+	final double BETA = 2.0; //wspó³czynnik funkcji przejœcia
 
 	private ArrayList<Double> inputs = new ArrayList<>();// Lista wejœæ perceptrona
 	private ArrayList<Double> weights = new ArrayList<>();// Lista wag perceptrona
 	private double output; // wyjœcie
 	private boolean bias; // flaga biasu true-zalaczony false - wylaczony
 	private double biasWeight; // waga biasu
+	private double delta;//b³¹d perceptrona
 
+	//-----------------konstruktor---------------------
 	public Perceptron(int inputCount, boolean bias) {
 		this.bias = bias;
 		for (int i = 0; i < inputCount; i++) {
@@ -22,15 +27,26 @@ public class Perceptron {
 		output = 0.0;
 		biasWeight = new Random().nextDouble();
 	}
-
+	//--------------gettery i settery----------------------
 	public double getOutput() {
 		return output;
 	}
+	
+	public ArrayList<Double> getWeight() {
+		return weights;
+	}
+	public double getdelta() {
+		return delta;
+	}
+	
 
 	public void setInputs(ArrayList<Double> inputs) {
 		this.inputs = inputs;
 	}
-
+	public void setdelta(double delta) {
+		this.delta = delta;
+	}
+	//-------------------------------------------
 	public void Calculate() {
 		double sum = 0.0;
 		// obliczanie sumy wejœæ pomno¿onych przez wagi
@@ -46,6 +62,14 @@ public class Perceptron {
 	//	System.out.println("wyjscie = " + output);
 
 	}
+	
+	//zle dzia³a korekcja wag
+	public void changeWeights() {
+		for(int i=0; i < inputs.size(); i++ ) {
+			weights.set(i, ETA * getdelta() * BETA * output * (1 - output) *inputs.get(i)); 
+		}
+	}
+	
 // --------------------   Wydruki  -------------------------------
 	public void printWeights() {
 		System.out.print("wagi perceptrona: ");
@@ -64,7 +88,8 @@ public class Perceptron {
 	}
 //------------------ Funkcja przejscia --------------------------
 	private double sigma(double arg) {
-		return 1.0 / (1 + Math.exp(-2.0 * arg));
+		return 1.0 / (1 + Math.exp(-BETA * arg));//beta = 2.0
 	}
 
+	
 }
