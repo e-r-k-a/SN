@@ -1,5 +1,6 @@
 package Model;
 
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -7,7 +8,7 @@ import java.util.Random;
 public class Perceptron {
 	
 	final double ETA = 0.5; //wspó³czynnik uczenia
-	final double BETA = 2.0; //wspó³czynnik funkcji przejœcia
+	final double BETA = 1.0; //wspó³czynnik funkcji przejœcia
 
 	private ArrayList<Double> inputs = new ArrayList<>();// Lista wejœæ perceptrona
 	private ArrayList<Double> weights = new ArrayList<>();// Lista wag perceptrona
@@ -46,6 +47,10 @@ public class Perceptron {
 	public void setdelta(double delta) {
 		this.delta = delta;
 	}
+	public void setWeights(int inputNumber, double newValue) {
+		weights.set(inputNumber, newValue);
+	}
+	
 	//-------------------------------------------
 	public void Calculate() {
 		double sum = 0.0;
@@ -63,10 +68,10 @@ public class Perceptron {
 
 	}
 	
-	//zle dzia³a korekcja wag
+	//------ korekcja wag ---------------
 	public void changeWeights() {
 		for(int i=0; i < inputs.size(); i++ ) {
-			weights.set(i, ETA * getdelta() * BETA * output * (1 - output) *inputs.get(i)); 
+			weights.set(i, weights.get(i) + ETA * getdelta() * inputs.get(i)); 
 		}
 	}
 	

@@ -42,7 +42,11 @@ public class Layer {
 	public int getPerceptronCount() {
 		return perceptronCount;
 	}
-
+	
+	public ArrayList<Perceptron> getPerceptrons() {
+		return perceptrons;
+	}
+	
 	public ArrayList<Double> getWeight(int number) { // zwrócenie listy wag wejscia number wszystkich perceptronów
 		ArrayList<Double> weight = new ArrayList<>();// Lista wag wejscia number kolejnych perceptronów
 		for (int i = 0; i < perceptronCount; i++) {
@@ -58,6 +62,8 @@ public class Layer {
 	public void setDelta(ArrayList<Double> delta) {
 		this.delta = delta;
 	}
+	
+	
 
 	// ---------------przeliczenie sieci -----------------------------------
 	public void calculate() {
@@ -74,12 +80,14 @@ public class Layer {
 	// wszystkich perceptronów
 	// i zapisuje je do swojej listy b³êdów
 	public void calculateDelta(Layer nextLayer) {
-		ArrayList<Double> weight = new ArrayList<>();
+		ArrayList<Double> weight = new ArrayList<>();//lista i wag perceptronów nastêpnej warstwy
 		for (int i = 0; i < perceptronCount; i++) {
 			double tmpDelta = 0;
 			weight = nextLayer.getWeight(i);
 			for (int j = 0; j < nextLayer.getPerceptronCount(); j++) {
-				tmpDelta += weight.get(j) * nextLayer.getDelta().get(j);
+			//	tmpDelta += weight.get(j) * nextLayer.getDelta().get(j);
+				double tmpOutput = nextLayer.getPerceptrons().get(j).getOutput();
+				tmpDelta += tmpOutput * (1 - tmpOutput) * weight.get(j) * nextLayer.getDelta().get(j);
 			}
 			delta.set(i, tmpDelta);
 			perceptrons.get(i).setdelta(tmpDelta);// ustawienie bledu w perceptronie
